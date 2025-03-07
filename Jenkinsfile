@@ -1,32 +1,27 @@
 pipeline {
     agent any
-
+    
     stages {
-        stage('Build_Maven_Project') {
+        stage('clone') {
             steps {
-                sh 'mvn archetype:generate -DgroupId=com.example.$Application -DartifactId=$Application -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMode=false'
-            }
-        }
-        stage('Listing_Contents') {
+                sh 'git clone -b main https://github.com/xaravind/pipeline.git'
+             }
+       }
+       stage('genarate') {
             steps {
-                dir ("$Application") {
-                sh 'ls -la'
+                dir("pipeline") {
+                    sh 'mvn package'
+                    sh 'ls -la'
                 }
             }
-        }
-        stage('Building_Application') {
+       }
+       stage('deploy') {
             steps {
-                dir ("$Application") {
-                sh 'mvn package'
+                dir("pipeline") {
+                    sh 'cp -r target/*.war /opt/apache-tomcat-9.0.100/webapps'
                 }
             }
-        }
-        stage('Deploy_Artifact_To_Tomcat'){
-            steps { 
-                dir ("$Application") {
-                sh 'cp /target/$Application*.war /opt/apache-tomcat-9.0.100/webapps/'
-                }
-            }
-	}
+       }
     }
 }
+
