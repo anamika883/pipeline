@@ -1,36 +1,51 @@
 pipeline {
     agent any
 
-     environment {
+    environment {
         GIT_URL = 'https://github.com/xaravind/pipeline.git'
         GIT_BRANCH = 'main'
-	PROJ_NAME= 'pipeline'
-	DEPLY
+        BUILD_NAME = 'pipeline'
+        BACKUP = '/opt/'
+        PROJECT_NAME = 'DevOps'
     }
 
     stages {
         stage('clone') {
             steps {
                 sh '''
-		git clone -b ${env.GIT_BRANCH} ${env.GIT_URL}
-		'''
-             }
-       }
-       stage('genarate') {
+                    git clone -b ${env.GIT_BRANCH} ${env.GIT_URL}
+                '''
+            }
+        }
+        stage('generate') {
             steps {
-                dir("$PROJ_NAME") {
+                dir("${env.BUILD_NAME}") {
                     sh 'mvn package'
                     sh 'ls -la'
+                    sh 'mv target/*.war ${env.PROJECT_NAME}.${env.BUILD_ID}'
                 }
             }
-       }
-       stage('deploy') {
+        }
+        stage('deploy') {
             steps {
-                dir("$PROJ_NAME") {
+                dir("${env.BUILD_NAME}") {
                     sh 'cp -r target/*.war /opt/apache-tomcat-9.0.100/webapps'
                 }
             }
-       }
+        }
+        stage('backup') {
+            steps {
+                dir("${env.BUILD_NAME}") {
+                    sh 'cp -r target/*.war ${env.BACKUP}'
+                }
+            }
+        }
+        stage('cleanup') {
+            steps {
+                dir("${env.BUILD_NAME}") {
+                    sh 'rm -rf target/*.war'
+                }
+            }
+        }
     }
 }
-
