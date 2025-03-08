@@ -21,22 +21,22 @@ pipeline {
             steps {
                 dir("${env.BUILD_NAME}") {
                     sh 'mvn package'
-                    sh 'ls -la'
-                    sh 'mv target/*.war ${env.PROJECT_NAME}.${env.BUILD_ID}'
+                    sh 'ls -la target'
+                    sh 'mv target/*.war ${env.PROJECT_NAME}.${env.BUILD_ID}.war'
                 }
             }
         }
         stage('deploy') {
             steps {
                 dir("${env.BUILD_NAME}") {
-                    sh 'cp -r target/*.war /opt/apache-tomcat-9.0.100/webapps'
+                    sh 'cp target/*.war /opt/apache-tomcat-9.0.100/webapps'
                 }
             }
         }
         stage('backup') {
             steps {
                 dir("${env.BUILD_NAME}") {
-                    sh 'cp -r target/*.war ${env.BACKUP}'
+                    sh 'cp target/*.war ${env.BACKUP}'
                 }
             }
         }
