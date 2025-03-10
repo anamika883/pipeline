@@ -36,7 +36,7 @@ pipeline {
         stage('backup') {
             steps {
                 dir("${BUILD_NAME}") {
-                    sh 'cp target/*.war ${env.BACKUP}'
+                    sh 'cp target/*.war ${BACKUP}'
                 }
             }
         }
