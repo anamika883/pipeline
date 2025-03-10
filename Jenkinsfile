@@ -22,7 +22,7 @@ pipeline {
                 dir("${BUILD_NAME}") {
                     sh 'mvn package'
                     sh 'ls -la target'
-                    sh 'mv target/*.war ${PROJECT_NAME}.${BUILD_ID}.war'
+                    sh 'mv target/*.war target/${PROJECT_NAME}.${BUILD_ID}.war'
                 }
             }
         }
