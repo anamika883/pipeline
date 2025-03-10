@@ -13,36 +13,36 @@ pipeline {
         stage('clone') {
             steps {
                 sh '''
-                    git clone -b ${env.GIT_BRANCH} ${env.GIT_URL}
+                    git clone -b ${GIT_BRANCH} ${GIT_URL}
                 '''
             }
         }
         stage('generate') {
             steps {
-                dir("${env.BUILD_NAME}") {
+                dir("${BUILD_NAME}") {
                     sh 'mvn package'
                     sh 'ls -la target'
-                    sh 'mv target/*.war ${env.PROJECT_NAME}.${env.BUILD_ID}.war'
+                    sh 'mv target/*.war ${PROJECT_NAME}.${BUILD_ID}.war'
                 }
             }
         }
         stage('deploy') {
             steps {
-                dir("${env.BUILD_NAME}") {
+                dir("${BUILD_NAME}") {
                     sh 'cp target/*.war /opt/apache-tomcat-9.0.100/webapps'
                 }
             }
         }
         stage('backup') {
             steps {
-                dir("${env.BUILD_NAME}") {
+                dir("${BUILD_NAME}") {
                     sh 'cp target/*.war ${env.BACKUP}'
                 }
             }
         }
         stage('cleanup') {
             steps {
-                dir("${env.BUILD_NAME}") {
+                dir("${BUILD_NAME}") {
                     sh 'rm -rf target/*.war'
                 }
             }
