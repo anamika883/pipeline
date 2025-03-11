@@ -12,9 +12,12 @@ pipeline {
     stages {
         stage('clone') {
             steps {
+                    dir("${BUILD_NAME}") {
+                    sh 'rm -rf'
                 sh '''
                     git clone -b ${GIT_BRANCH} ${GIT_URL}
                 '''
+                }
             }
         }
         stage('generate') {
