@@ -13,7 +13,7 @@ pipeline {
         stage('clone') {
             steps {
                     dir("${BUILD_NAME}") {
-                    sh 'rm -rf'
+                    sh 'rm -rf ${BUILD_NAME}'
                 sh '''
                     git clone -b ${GIT_BRANCH} ${GIT_URL}
                 '''
