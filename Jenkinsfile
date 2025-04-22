@@ -4,7 +4,7 @@ pipeline {
     environment {
         GIT_URL = 'https://github.com/xaravind/pipeline.git'
         GIT_BRANCH = 'main'
-        BUILD_NAME = 'pipeline'
+        BUILD_NAME = 'test'
         BACKUP = '/opt/'
         PROJECT_NAME = 'DevOps'
     }
