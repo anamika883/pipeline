@@ -1,5 +1,4 @@
 
-
 # Deploying Java Application on Amazon Linux with Maven and Tomcat
 
 
