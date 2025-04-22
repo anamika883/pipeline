@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        GIT_REPO = 'https://github.com/your-user/your-repo.git'
+        GIT_REPO = 'https://github.com/xaravind/pipeline.git'
         ARTIFACT_ID = 'your-artifact'
         BUILD_VERSION = "${env.BUILD_NUMBER}"
         SONARQUBE_ENV = 'SonarQube'              // Name configured under Manage Jenkins > SonarQube Servers
