@@ -27,7 +27,7 @@ pipeline {
                     sh """
                         mvn clean package
                         ls -la target
-                        mv target/*.war target/${PROJECT_NAME}.${BUILD_ID}.war
+                        sudo mv target/*.war target/${PROJECT_NAME}.${BUILD_ID}.war
                     """
                 }
             }
@@ -37,7 +37,7 @@ pipeline {
             steps {
                 dir("${MODULE_DIR}") {
                     sh """
-                        cp target/*.war ${BACKUP}
+                        sudo cp target/*.war ${BACKUP}
                     """
                 }
             }
@@ -47,7 +47,7 @@ pipeline {
             steps {
                 dir("${MODULE_DIR}") {
                     sh """
-                        rm -rf target/*.war
+                        sudo rm -rf target/*.war
                     """
                 }
             }
