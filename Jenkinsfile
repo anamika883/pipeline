@@ -29,13 +29,6 @@ pipeline {
                 }
             }
         }
-        stage('deploy') {
-            steps {
-                dir("${BUILD_NAME}") {
-                    sh 'cp target/*.war /opt/apache-tomcat-9.0.100/webapps'
-                }
-            }
-        }
         stage('backup') {
             steps {
                 dir("${BUILD_NAME}") {
