@@ -67,16 +67,15 @@ pipeline {
         }
 
         stage('Deploy to Tomcat') {
-            environment {
-                TOMCAT_CREDS = credentials('tomcat_credentials')
-            }
             steps {
-                dir("${MODULE_DIR}") {
-                    sh """
-                    curl -v --user ${TOMCAT_CREDS_USR}:${TOMCAT_CREDS_PSW} \\
-                     --upload-file target/${PROJECT_NAME}.${BUILD_ID}.war \\
-                     "http://54.226.147.226:8090/manager/text/deploy?path=/${PROJECT_NAME}&update=true"
-                    """
+                withCredentials([usernamePassword(credentialsId: 'tomcat_credentials', usernameVariable: 'TOM_USER', passwordVariable: 'TOM_PASS')]) {
+                    dir("${MODULE_DIR}") {
+                        sh '''
+                            curl -v --user "$TOM_USER:$TOM_PASS" \
+                            --upload-file target/${PROJECT_NAME}.${BUILD_ID}.war \
+                            "http://54.226.147.226:8090/manager/text/deploy?path=/${PROJECT_NAME}&update=true"
+                        '''
+                    }
                 }
             }
         }
