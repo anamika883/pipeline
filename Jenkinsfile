@@ -4,42 +4,51 @@ pipeline {
     environment {
         GIT_URL = 'https://github.com/xaravind/pipeline.git'
         GIT_BRANCH = 'main'
-        BUILD_NAME = 'Java_code'
+        MODULE_DIR = 'java_code'
         BACKUP = '/opt/'
         PROJECT_NAME = 'DevOps'
     }
 
+    triggers {
+        githubPush()
+    }
+
     stages {
-        stage('clone') {
+        stage('Checkout') {
             steps {
-                    dir("${BUILD_NAME}") {
-                    sh 'rm -rf ${BUILD_NAME}'
-                sh '''
-                    git clone -b ${GIT_BRANCH} ${GIT_URL}
-                '''
+                // If using Pipeline script from SCM, Jenkins already does checkout
+                echo "Repository checked out to workspace"
+            }
+        }
+
+        stage('Build WAR') {
+            steps {
+                dir("${MODULE_DIR}") {
+                    sh """
+                        mvn clean package
+                        ls -la target
+                        mv target/*.war target/${PROJECT_NAME}.${BUILD_ID}.war
+                    """
                 }
             }
         }
-        stage('generate') {
+
+        stage('Backup WAR') {
             steps {
-                dir("${BUILD_NAME}") {
-                    sh 'mvn package'
-                    sh 'ls -la target'
-                    sh 'mv target/*.war target/${PROJECT_NAME}.${BUILD_ID}.war'
+                dir("${MODULE_DIR}") {
+                    sh """
+                        cp target/*.war ${BACKUP}
+                    """
                 }
             }
         }
-        stage('backup') {
+
+        stage('Cleanup WAR') {
             steps {
-                dir("${BUILD_NAME}") {
-                    sh 'cp target/*.war ${BACKUP}'
-                }
-            }
-        }
-        stage('cleanup') {
-            steps {
-                dir("${BUILD_NAME}") {
-                    sh 'rm -rf target/*.war'
+                dir("${MODULE_DIR}") {
+                    sh """
+                        rm -rf target/*.war
+                    """
                 }
             }
         }
