@@ -2,47 +2,53 @@ pipeline {
     agent any
 
     environment {
-        GIT_REPO = 'https://github.com/xaravind/pipeline.git'
-        ARTIFACT_ID = 'your-artifact'
-        BUILD_VERSION = "${env.BUILD_NUMBER}"
-        SONARQUBE_ENV = 'SonarQube'              // Name configured under Manage Jenkins > SonarQube Servers
-        SONAR_TOKEN = credentials('sonarqube_token')
-    }
-
-    triggers {
-        githubPush()
+        GIT_URL = 'https://github.com/xaravind/pipeline.git'
+        GIT_BRANCH = 'main'
+        BUILD_NAME = 'pipeline'
+        BACKUP = '/opt/'
+        PROJECT_NAME = 'DevOps'
     }
 
     stages {
-        stage('Clone Source Code') {
+        stage('clone') {
             steps {
-                git credentialsId: 'git_creds', url: "${env.GIT_REPO}"
+                    dir("${BUILD_NAME}") {
+                    sh 'rm -rf ${BUILD_NAME}'
+                sh '''
+                    git clone -b ${GIT_BRANCH} ${GIT_URL}
+                '''
+                }
             }
         }
-
-        stage('Build WAR') {
+        stage('generate') {
             steps {
-                sh "mvn clean package -Drevision=${BUILD_VERSION}"
+                dir("${BUILD_NAME}") {
+                    sh 'mvn package'
+                    sh 'ls -la target'
+                    sh 'mv target/*.war target/${PROJECT_NAME}.${BUILD_ID}.war'
+                }
             }
         }
-
-        stage('SonarQube Analysis') {
+        stage('deploy') {
             steps {
-                withSonarQubeEnv("${SONARQUBE_ENV}") {
-                    sh "mvn sonar:sonar -Dsonar.login=${SONAR_TOKEN}"
+                dir("${BUILD_NAME}") {
+                    sh 'cp target/*.war /opt/apache-tomcat-9.0.100/webapps'
+                }
+            }
+        }
+        stage('backup') {
+            steps {
+                dir("${BUILD_NAME}") {
+                    sh 'cp target/*.war ${BACKUP}'
+                }
+            }
+        }
+        stage('cleanup') {
+            steps {
+                dir("${BUILD_NAME}") {
+                    sh 'rm -rf target/*.war'
                 }
             }
         }
     }
-
-    post {
-        success {
-            echo "Build and SonarQube scan completed."
-        }
-        failure {
-            echo "Build or scan failed."
-        }
-    }
 }
-
-
