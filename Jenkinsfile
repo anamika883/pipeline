@@ -74,7 +74,7 @@ pipeline {
                     sh """
                         curl -v --user ${TOMCAT_CREDS_USR}:${TOMCAT_CREDS_PSW} \
                              --upload-file target/${PROJECT_NAME}.${BUILD_ID}.war \
-                             "http://54.226.147.226:8080/manager/text/deploy?path=/${PROJECT_NAME}&update=true"
+                             "http://54.226.147.226:8081/repository/maven-releases/com/devops/DevOps/${BUILD_ID}/DevOps-${BUILD_ID}.war"
                     """
                 }
             }
