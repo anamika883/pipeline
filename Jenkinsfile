@@ -53,6 +53,17 @@ pipeline {
                 }
             }
         }
+        stage('SonarQube Quality Gate Check') {
+            steps {
+                script {
+                    // Wait for the quality gate status from SonarQube
+                    def qg = waitForQualityGate()
+                    if (qg.status != 'OK') {
+                        error "SonarQube quality gate failed: ${qg.status}"
+                    }
+                }
+            }
+        }
 
         stage('Upload to Nexus') {
             environment {
