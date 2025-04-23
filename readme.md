@@ -247,7 +247,11 @@ for job trigger just add a empty  line at the end of jenkinsfile,
 
 add, commit and push so it will trigger the build
 
+## give sudo permisions to jenkins user
 
+sudo vi /etc/sudeoers
+
+jenkins ALL=(ALL)       ALL
 
 
 
