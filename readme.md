@@ -1,22 +1,25 @@
+# CI/CD Pipeline Setup with Jenkins, Nexus, Tomcat, and SonarQube
 
-Created three ec2-servers with t2.medium
+## Infrastructure Setup
 
-1. jenkins_build
-2. Nexus_tomcat
-3. SonarQube
+Created three EC2 servers with `t2.medium` instance type:
 
-Login to each server
+1. **jenkins_build**
+2. **nexus_tomcat**
+3. **sonarqube**
 
-Update and install required package with install_scripts
+![Image](https://github.com/user-attachments/assets/3590e514-2c81-477b-8df0-08534398ae53)
 
-1. jenkins_build
+### Login to Each Server
+Update and install required packages with `install_scripts`
 
+#### For jenkins_build:
+```bash
 sudo yum update -y
-sudo yum git -y
+sudo yum install git -y
 git clone https://github.com/xaravind/install_scripts.git
-
-you'll something like below output
-
+```
+Sample output:
 ```bash
 [ec2-user@ip-172-31-23-82 ~]$ cd install_scripts/
 [ec2-user@ip-172-31-23-82 install_scripts]$ ll
@@ -25,37 +28,31 @@ total 12
 -rw-r--r--. 1 ec2-user ec2-user 3256 Apr 23 08:46 nexus_tomcat.sh
 -rw-r--r--. 1 ec2-user ec2-user 1786 Apr 23 08:46 sonarqube.sh
 ```
-Give execute permission and run the according to server, it will install and make tools up and running.
 
+Give execute permission and run the respective script:
+```bash
 chmod 755 *.sh
 sh jenkins_build.sh
-
-sample output
-
+```
+Sample output:
 ```bash
 [ec2-user@ip-172-31-23-82 install_scripts]$ ./jenkins_build.sh
 [INFO] Re-running script as root...
 ========== Script started at Wed Apr 23 08:51:14 UTC 2025 ==========
 [INFO] Updating system...
-Last metadata expiration check: 0:05:50 ago on Wed Apr 23 08:45:24 2025.
-Dependencies resolved.
-Nothing to do.
-Complete!
-[INFO] Installing Amazon Corretto 21 JDK...
-Complete!
-[INFO] Reloading systemd daemon...
-[INFO] Starting Jenkins...
-Created symlink /etc/systemd/system/multi-user.target.wants/jenkins.service → /usr/lib/systemd/system/jenkins.service.
-[INFO] Checking Jenkins status...
+..
+..
 [SUCCESS] Jenkins started successfully!
 [INFO] Installation completed successfully!
-========== Script ended at Wed Apr 23 08:51:48 UTC 2025 ==========
-[ec2-user@ip-172-31-23-82 install_scripts]$
-
 ```
 
-at the end all of your jenkins, nexus , sonar and tomcat will be up and running
+Once completed, Jenkins, Nexus, Tomcat, and SonarQube will be running.
 
+Verify:
+```bash
+curl ifconfig.me
+netstat -ntlp
+```
 ```bash
 [ec2-user@ip-172-31-23-82 install_scripts]$ curl ifconfig.me
 54.221.142.241[ec2-user@ip-172-31-23-82 install_scripts]$ netstat -ntlp
@@ -67,64 +64,79 @@ tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      
 tcp6       0      0 :::22                   :::*                    LISTEN      -
 tcp6       0      0 :::8080                 :::*      
 ```
-access them with public ip and port no:- 
-
-jenkins - http://<public-ip>:8080
-ex:- http://54.221.142.241:8080/
-Nexus - http://<public-ip>:8091
-ex:- http://54.147.143.71:8091/
-tomcat - http://<public-ip>:8080
-ex:- http://54.147.143.71:8080/
-sonarqube - http://<public-ip>:9000
-ex:- http://54.159.93.31:9000/
 
 
-## Login to jenkins and setup password
+Access via browser:
+- Jenkins: `http://<public-ip>:8080`
+- Nexus: `http://<public-ip>:8091`
+- Tomcat: `http://<public-ip>:8080`
+- SonarQube: `http://<public-ip>:9000`
 
-1. [ec2-user@ip-172-31-23-82 install_scripts]$ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+---
 
+## Jenkins Setup
+
+### Initial Setup
+1. Run:
+```bash
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+```
+Sample output:
+```bash
+[ec2-user@ip-172-31-23-82 install_scripts]$ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 1853f621edb045a68ad11c20c0d478e5
+```
+2. Copy the password and follow the setup wizard in the browser.
+3. Set username, password, and install suggested plugins.
 
-2. copy and paste the code in browser, click on continue, select install required plugins
- give required details and set up username and password, click on save and continue, next click on save and finish.
+![Image](https://github.com/user-attachments/assets/e2455d91-5d49-43f3-8fab-161286956b22)
 
- 3. click on start using jenkins, jenkins server is ready.
+![Image](https://github.com/user-attachments/assets/229bb58f-9cff-4fc4-9821-cc1542eeb22d)
 
- ## give sudo permisions to jenkins user
+![Image](https://github.com/user-attachments/assets/bff05732-e628-4b5a-9ac9-5837b569718c)
 
-sudo vi /etc/sudeoers
+![Image](https://github.com/user-attachments/assets/de4337f2-6b52-48b2-ac44-0e750b48584a)
 
+### Add Sudo Permissions to Jenkins
+```bash
+sudo visudo
+```
+Add:
+```bash
 jenkins ALL=(ALL) NOPASSWD: ALL
+```
 
+---
 
-## setup Nexus
+## Nexus Setup
 
-1. click on sign in 
-
-go to nexus_tomcat server and get intial password
-
+1. Login using initial password:
+```bash
 sudo cat /opt/sonatype-work/nexus3/admin.password
-
-
+```
+Sample output:
+```bash
 [ec2-user@ip-172-31-19-48 install_scripts]$ sudo sudo cat /opt/sonatype-work/nexus3/admin.password
 6f412470-d4fa-4bb1-949e-df250c2594b9
+```
 
-username - admin
-password - paste password and signin
+2. Username: `admin` and password: `admin`
+3. Set a new password, configure anonymous access, and finish setup.
 
-2. it will login and pop up welcome tab click on next give new password , click on next , click on agree, select Configure Anonymous Access, click on next and finish
+![Image](https://github.com/user-attachments/assets/dcd59413-b613-4949-90f2-3aadf7eefbf1)
 
-3. nexus server is ready!!
+![Image](https://github.com/user-attachments/assets/eb3f90b0-23d8-48fd-831a-f8fa719890fa)
 
-## setup tomcat
+![Image](https://github.com/user-attachments/assets/bdc3f3ad-574b-4bab-885c-847574f9a33b)
 
-configure tomcat-users.xml and context.xml file to setup user and password and to access the server.
+---
 
-1. Update `conf/tomcat-users.xml`** on your Tomcat server
 
-Make sure the user you're using in Jenkins has the `manager-script` role.
 
-Example:
+## Tomcat Setup
+
+### tomcat-users.xml
+Update `conf/tomcat-users.xml`:
 ```xml
 <role rolename="manager-script"/>
 <user username="jenkins" password="your_password" roles="manager-script"/>
@@ -132,136 +144,145 @@ Example:
 <user username="tomcat" password="your_password" roles="manager-gui"/>
 ```
 
-2. Update `webapps/manager/META-INF/context.xml`**
-
-Tomcat restricts remote access to the manager by default. You need to allow Jenkins’ IP.
-
-Find this line:
+### context.xml
+Update `webapps/manager/META-INF/context.xml`:
 ```xml
-<Context ...>
+<Context>
   <Valve className="org.apache.catalina.valves.RemoteAddrValve"
          allow="127\.\d+\.\d+\.\d+|::1"/>
 </Context>
 ```
+![Image](https://github.com/user-attachments/assets/4222e9da-891c-4f3b-9a08-179592571737)
 
-Tomcat setup ready!!!
-
-## setup sonarqube
-
-1. Login with default username and password 
-admin and admin
-
-
-2. setup new password
-
-2. Generate Token in SonarQube
-On your SonarQube server (`http://54.159.93.31:9000/`):
-
-- Go to your profile → **My Account** → **Security**
--  name it `jenkins-token`
-- select Type as Global anaylsis token
--  Click **Generate Token**,
-- Copy the token
-
-
-Sonarqube  server Ready!!!
+![Image](https://github.com/user-attachments/assets/d4399891-99a3-4ff2-a0ba-031451a887ec)
 
 ---
-### jenkins plugin installation
 
-Go to **Jenkins > Manage Jenkins > plugins > Availiable pligins**
+## SonarQube Setup
 
-search SonarQube ScannerVersion 2.18, select and install and restart jenkins server
+1. Login with default credentials:
+   - Username: `admin`
+   - Password: `admin`
+2. Update password.
+3. Generate a token:
+   - My Account → Security
+   - Name: `jenkins-token`
+   - Type: Global analysis token
+   - Save the token
+
+---
+
+![Image](https://github.com/user-attachments/assets/ca983f22-3e2c-471d-8ead-54043360daf0)
+
+![Image](https://github.com/user-attachments/assets/826e5f14-ded7-42ef-8119-9aa870a9b34b)
+
+![Image](https://github.com/user-attachments/assets/876e446d-d497-40d5-8340-5ec68d0c48fc)
+
+![Image](https://github.com/user-attachments/assets/dcb2f369-7a16-4cb8-9927-5c076aca2987)
 
 
 
 
-### 🔐 1. **Jenkins Credentials Setup**
 
-In Jenkins:
+## Jenkins Plugin Installation
 
-- Go to `Manage Jenkins → Credentials → (global) → Add Credentials`
-  - **Kind**: `Secret text`
-  - **Secret**: *Paste your SonarQube token*
-  - **ID**: `sonarqube_token` *(you can use any ID, but we’ll reference this)*
-  - **Description**: `SonarQube Token`
+1. Go to: `Manage Jenkins → Plugins → Available`
+2. Install **SonarQube Scanner** plugin (version 2.18)
+3. Restart Jenkins
 
-similar way update below passwords
+---
 
-- **Nexus Username/Password**  
-  - Type: _Username with password_  
+## Jenkins Credentials Setup
+
+Go to: `Manage Jenkins → Credentials → (global) → Add Credentials`
+
+- **SonarQube Token**:
+  - Kind: `Secret text`
+  - Secret: *Paste your token*
+  - ID: `sonarqube_token`
+
+- **Nexus Credentials**:
+  - Kind: `Username with password`
   - ID: `nexus_credentials`
 
-- **Tomcat Manager Credentials**  
-  - Type: _Username with password_  
-  - ID: `tomcat_credentials` # manager-script  - user name and password
+- **Tomcat Manager Credentials**:
+  - Kind: `Username with password`
+  - ID: `tomcat_credentials`
+
+---
 
 
+## Jenkins Configuration for SonarQube
 
-### 3. Configure SonarQube Server in Jenkins
-In `Manage Jenkins → Configure System`:
-
-- Scroll to **SonarQube servers**
-- Click **Add SonarQube**
-  - **Name**: `MySonarServer`
-  - **Server URL**: `http://<public-ip>:9000`
-  - Check **Server authentication token**
-    - Choose the credential: `sonarqube_token`
+### SonarQube Servers
+Go to: `Manage Jenkins → Configure System → SonarQube Servers`
+- Name: `MySonarServer`
+- URL: `http://<sonarqube-ip>:9000`
+- Choose `sonarqube_token`
 - Save
 
----
+### Global Tool Configuration
+Go to: `Manage Jenkins → Global Tool Configuration`
+- Add **SonarQube Scanner** with name `SonarQubeScanner`
 
-### 🧰 2. **Jenkins Global Tool Configuration**
-
-Go to **Manage Jenkins > Global Tool Configuration**, and:
-
-- Add **SonarQube Scanner** (make sure to name it `SonarQubeScanner`)
-- Add your **SonarQube Server** under **Manage Jenkins > Configure System > SonarQube Servers**
+![Image](https://github.com/user-attachments/assets/ce72d15f-50c8-4460-8aba-8b88e692e456)
 
 ---
 
-## setup webhook to your github repo
+## GitHub Webhook Setup
 
-go to your repo, select settings--> webhooks --> 
-give payload url like below
-http://<jenkins-public-ip>/:8080/github-webhook/
+Go to your GitHub repo → Settings → Webhooks → Add webhook:
+- Payload URL: `http://<jenkins-public-ip>:8080/github-webhook/`
+- Content type: `application/json`
+- Save
 
-select content type as application/json --> save
-
-my pipeline githubrepo for your refrence
-
-https://github.com/xaravind/pipeline.git
-
-that will have Jenkinsfile and a java code 
-
-## create a pipeline
-
-click on new item , give name - BuildWarPipeline , select pipeline , click on ok
-
-go to pipeline on left hand side
-
-select pipeline script from scm 
-
-seleect scm as git
-
-give your repo url that webhooks configured and contains jenkinfile and code
-
-give your branch name 
-
-click on save
-
-for job trigger just add a empty  line at the end of jenkinsfile,
-
-add, commit and push so it will trigger the build
+Sample repo with Jenkinsfile and Java code: [https://github.com/xaravind/pipeline.git](https://github.com/xaravind/pipeline.git)
 
 
-Pipeline will build the war, do the sonar analysis, upload to nexus, deploy to tomcat, backup war in local and finally clean up the war in code.
+---
 
-Once build is success,
-check the sonar results in sonar server
-check war in nexus repo
-finally access the application.
+## Create Jenkins Pipeline
+
+1. Go to Jenkins → New Item → Name: `BuildWarPipeline` → Type: `Pipeline`
+2. Configure:
+   - Definition: Pipeline script from SCM
+   - SCM: Git
+   - Repo URL: *your GitHub URL*
+   - Branch: *your branch*
+   - Jenkinsfile location: root or path to Jenkinsfile
+3. Save
+   
+![Image](https://github.com/user-attachments/assets/68292173-f577-4a44-92b8-403aff6b3f64)
+
+![Image](https://github.com/user-attachments/assets/da424622-bc02-4c5f-9dbc-7a763e9330d6)
+
+### Trigger Build
+- Add a blank line at the end of the Jenkinsfile and push the changes
+- 
+![Image](https://github.com/user-attachments/assets/5b466e55-a40e-4829-b740-8218975d3fcd)
+
+---
 
 
+## CI/CD Pipeline Flow
+
+1. Build the WAR file
+2. Run SonarQube analysis 
+3. Upload to Nexus repository
+4. Deploy WAR to Tomcat
+5. Backup WAR locally
+6. Cleanup WAR from code folder
+
+![Image](https://github.com/user-attachments/assets/04e3e197-f837-496e-ba68-d5c94e231214)
+
+![Image](https://github.com/user-attachments/assets/396e5493-349c-4a4a-b8fb-70a4c2d93f28)
+
+![Image](https://github.com/user-attachments/assets/4f751772-60ec-41f5-bf44-0a7064c5a39c)
+
+![Image](https://github.com/user-attachments/assets/2166138a-2fa3-4fc9-a6db-360fe8486319)
+
+![Image](https://github.com/user-attachments/assets/5ea933ef-17a0-479b-a299-40bf1870568a)
+
+---
 
 
