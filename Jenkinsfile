@@ -9,7 +9,7 @@ pipeline {
         PROJECT_NAME = 'DevOps'
         SONAR_SCANNER_HOME = tool 'SonarQubeScanner'
         SONARQUBE_URL = 'http://54.159.93.31:9000'
-        NEXUS_URL = 'http://54.147.143.71:8081/repository/maven-releases'
+        NEXUS_URL = 'http://54.147.143.71:8081/repository/war-files'
         TOMCAT_URL = 'http://54.147.143.71:8090/manager/text/deploy'
     }
 
@@ -59,13 +59,11 @@ pipeline {
             }
             steps {
                 dir("${MODULE_DIR}") {
-                    withCredentials([usernamePassword(credentialsId: 'nexus_credentials', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
-                        sh '''
-                            mvn deploy \
-                                -DaltDeploymentRepository=nexus::default::http://54.147.143.71:8081/repository/maven-releases \
-                                -Dusername=$NEXUS_USER -Dpassword=$NEXUS_PASS
-                        '''
-                    }
+                    sh '''
+                        curl -v --user $NEXUS_CREDS_USR:$NEXUS_CREDS_PSW \
+                             --upload-file target/'${PROJECT_NAME}.${BUILD_ID}.war' \
+                             ${NEXUS_URL}/'${PROJECT_NAME}.${BUILD_ID}.war'
+                    '''
                 }
             }
         }
@@ -106,4 +104,3 @@ pipeline {
         }
     }
 }
-
