@@ -90,6 +90,13 @@ ex:- http://54.159.93.31:9000/
 
  3. click on start using jenkins, jenkins server is ready.
 
+ ## give sudo permisions to jenkins user
+
+sudo vi /etc/sudeoers
+
+jenkins ALL=(ALL) NOPASSWD: ALL
+
+
 ## setup Nexus
 
 1. click on sign in 
@@ -247,16 +254,16 @@ for job trigger just add a empty  line at the end of jenkinsfile,
 
 add, commit and push so it will trigger the build
 
-## give sudo permisions to jenkins user
 
-sudo vi /etc/sudeoers
+Pipeline will build the war, do the sonar analysis, upload to nexus, deploy to tomcat, backup war in local and finally clean up the war in code.
 
-jenkins ALL=(ALL) NOPASSWD: ALL
+Once build is success,
+check the sonar results in sonar server
+check war in nexus repo
+finally access the application.
 
 
-
-
-## 🚀 Final Enhanced Jenkinsfile
+## 🚀 Final  Jenkinsfile
 
 ```groovy
 pipeline {

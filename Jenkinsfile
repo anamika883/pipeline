@@ -9,7 +9,7 @@ pipeline {
         PROJECT_NAME = 'DevOps'
         SONAR_SCANNER_HOME = tool 'SonarQubeScanner'
         SONARQUBE_URL = 'http://54.159.93.31:9000'
-        NEXUS_URL = 'http://54.147.143.71:8081/repository/war-repo'
+        NEXUS_URL = 'http://54.147.143.71:8081/repository/maven-releases'
         TOMCAT_URL = 'http://54.147.143.71:8090/manager/text/deploy'
     }
 
