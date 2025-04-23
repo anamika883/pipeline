@@ -100,8 +100,10 @@ pipeline {
                         sudo rm -rf target/*.war
                     """
                 }
-            }
+            }a
         }
     }
 }
+
+
 
