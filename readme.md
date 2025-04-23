@@ -251,7 +251,8 @@ add, commit and push so it will trigger the build
 
 sudo vi /etc/sudeoers
 
-jenkins ALL=(ALL)       ALL
+jenkins ALL=(ALL) NOPASSWD: ALL
+
 
 
 
