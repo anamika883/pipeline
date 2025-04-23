@@ -101,7 +101,7 @@
     <distributionManagement>
         <repository>
             <id>maven-releases</id>  <!-- Repository ID, used for authentication -->
-            <url>http://54.234.203.250:8081/repository/maven-releases/</url>  <!-- Replace with your actual repository URL -->
+            <url>http://54.147.143.71:8081/repository/maven-releases/</url>  <!-- Replace with your actual repository URL -->
         </repository>
     </distributionManagement>
 
