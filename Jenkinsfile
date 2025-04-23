@@ -59,11 +59,11 @@ pipeline {
             }
             steps {
                 dir("${MODULE_DIR}") {
-                    sh '''
+                    sh """
                         curl -v --user $NEXUS_CREDS_USR:$NEXUS_CREDS_PSW \
                              --upload-file target/'${PROJECT_NAME}.${BUILD_ID}.war' \
                              ${NEXUS_URL}/'${PROJECT_NAME}.${BUILD_ID}.war'
-                    '''
+                    """
                 }
             }
         }
