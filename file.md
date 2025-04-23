@@ -89,13 +89,13 @@ Sample output:
 2. Copy the password and follow the setup wizard in the browser.
 3. Set username, password, and install suggested plugins.
 
-![Image](https://github.com/user-attachments/assets/de4337f2-6b52-48b2-ac44-0e750b48584a)
+![Image](https://github.com/user-attachments/assets/e2455d91-5d49-43f3-8fab-161286956b22)
 
 ![Image](https://github.com/user-attachments/assets/229bb58f-9cff-4fc4-9821-cc1542eeb22d)
 
 ![Image](https://github.com/user-attachments/assets/bff05732-e628-4b5a-9ac9-5837b569718c)
 
-![Image](https://github.com/user-attachments/assets/e2455d91-5d49-43f3-8fab-161286956b22)
+![Image](https://github.com/user-attachments/assets/de4337f2-6b52-48b2-ac44-0e750b48584a)
 
 ### Add Sudo Permissions to Jenkins
 ```bash
@@ -123,11 +123,11 @@ Sample output:
 2. Username: `admin` and password: `admin`
 3. Set a new password, configure anonymous access, and finish setup.
 
-![Image](https://github.com/user-attachments/assets/bdc3f3ad-574b-4bab-885c-847574f9a33b)
+![Image](https://github.com/user-attachments/assets/dcd59413-b613-4949-90f2-3aadf7eefbf1)
 
 ![Image](https://github.com/user-attachments/assets/eb3f90b0-23d8-48fd-831a-f8fa719890fa)
 
-![Image](https://github.com/user-attachments/assets/dcd59413-b613-4949-90f2-3aadf7eefbf1)
+![Image](https://github.com/user-attachments/assets/bdc3f3ad-574b-4bab-885c-847574f9a33b)
 
 ---
 
@@ -171,13 +171,18 @@ Update `webapps/manager/META-INF/context.xml`:
    - Save the token
 
 ---
+
 ![Image](https://github.com/user-attachments/assets/ca983f22-3e2c-471d-8ead-54043360daf0)
 
-![Image](https://github.com/user-attachments/assets/dcb2f369-7a16-4cb8-9927-5c076aca2987)
+![Image](https://github.com/user-attachments/assets/826e5f14-ded7-42ef-8119-9aa870a9b34b)
 
 ![Image](https://github.com/user-attachments/assets/876e446d-d497-40d5-8340-5ec68d0c48fc)
 
-![Image](https://github.com/user-attachments/assets/826e5f14-ded7-42ef-8119-9aa870a9b34b)
+![Image](https://github.com/user-attachments/assets/dcb2f369-7a16-4cb8-9927-5c076aca2987)
+
+
+
+
 
 ## Jenkins Plugin Installation
 
@@ -247,11 +252,9 @@ Sample repo with Jenkinsfile and Java code: [https://github.com/xaravind/pipelin
    - Jenkinsfile location: root or path to Jenkinsfile
 3. Save
    
-![Image](https://github.com/user-attachments/assets/84c7d2c3-1108-47e0-a0f1-01a631c65526)
+![Image](https://github.com/user-attachments/assets/68292173-f577-4a44-92b8-403aff6b3f64)
 
 ![Image](https://github.com/user-attachments/assets/da424622-bc02-4c5f-9dbc-7a763e9330d6)
-
-![Image](https://github.com/user-attachments/assets/68292173-f577-4a44-92b8-403aff6b3f64)
 
 ### Trigger Build
 - Add a blank line at the end of the Jenkinsfile and push the changes
@@ -259,8 +262,6 @@ Sample repo with Jenkinsfile and Java code: [https://github.com/xaravind/pipelin
 ![Image](https://github.com/user-attachments/assets/5b466e55-a40e-4829-b740-8218975d3fcd)
 
 ---
-![Image](https://github.com/user-attachments/assets/04e3e197-f837-496e-ba68-d5c94e231214)
-
 
 
 ## CI/CD Pipeline Flow
@@ -272,13 +273,15 @@ Sample repo with Jenkinsfile and Java code: [https://github.com/xaravind/pipelin
 5. Backup WAR locally
 6. Cleanup WAR from code folder
 
-![Image](https://github.com/user-attachments/assets/5ea933ef-17a0-479b-a299-40bf1870568a)
+![Image](https://github.com/user-attachments/assets/04e3e197-f837-496e-ba68-d5c94e231214)
 
 ![Image](https://github.com/user-attachments/assets/396e5493-349c-4a4a-b8fb-70a4c2d93f28)
 
 ![Image](https://github.com/user-attachments/assets/4f751772-60ec-41f5-bf44-0a7064c5a39c)
 
 ![Image](https://github.com/user-attachments/assets/2166138a-2fa3-4fc9-a6db-360fe8486319)
+
+![Image](https://github.com/user-attachments/assets/5ea933ef-17a0-479b-a299-40bf1870568a)
 
 ---
 
