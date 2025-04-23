@@ -8,7 +8,9 @@ pipeline {
         BACKUP = '/opt/'
         PROJECT_NAME = 'DevOps'
         SONAR_SCANNER_HOME = tool 'SonarQubeScanner'
-        TOMCAT_CREDS = credentials('tomcat_credentials')
+        SONARQUBE_URL = 'http://54.159.93.31:9000'
+        NEXUS_URL = 'http://54.147.143.71:8081/repository/war-repo'
+        TOMCAT_URL = 'http://54.147.143.71:8080/manager/text/deploy'
     }
 
     triggers {
@@ -43,7 +45,7 @@ pipeline {
                     withSonarQubeEnv('MySonarServer') {
                         sh """
                             mvn sonar:sonar -Dsonar.projectKey=${PROJECT_NAME} \
-                                             -Dsonar.host.url=http://172.31.19.112:9000 \
+                                             -Dsonar.host.url=${SONARQUBE_URL} \
                                              -Dsonar.login=${SONAR_TOKEN}
                         """
                     }
@@ -60,22 +62,23 @@ pipeline {
                     sh """
                         curl -v --user ${NEXUS_CREDS_USR}:${NEXUS_CREDS_PSW} \
                              --upload-file target/${PROJECT_NAME}.${BUILD_ID}.war \
-                             http://54.226.147.226:8081/repository/war-repo/${PROJECT_NAME}.${BUILD_ID}.war
+                             ${NEXUS_URL}/${PROJECT_NAME}.${BUILD_ID}.war
                     """
                 }
             }
         }
 
         stage('Deploy to Tomcat') {
+            environment {
+                TOMCAT_CREDS = credentials('tomcat_credentials')
+            }
             steps {
-                withCredentials([usernamePassword(credentialsId: 'tomcat_credentials', usernameVariable: 'TOM_USER', passwordVariable: 'TOM_PASS')]) {
-                    dir("${MODULE_DIR}") {
-                        sh '''
-                            curl -v --user "$TOM_USER:$TOM_PASS" \
-                            --upload-file target/${PROJECT_NAME}.${BUILD_ID}.war \
-                            "http://54.226.147.226:8090/manager/text/deploy?path=/${PROJECT_NAME}&update=true"
-                        '''
-                    }
+                dir("${MODULE_DIR}") {
+                    sh """
+                        curl -v --user ${TOMCAT_CREDS_USR}:${TOMCAT_CREDS_PSW} \
+                             --upload-file target/${PROJECT_NAME}.${BUILD_ID}.war \
+                             "${TOMCAT_URL}?path=/${PROJECT_NAME}&update=true"
+                    """
                 }
             }
         }
