@@ -9,7 +9,8 @@ pipeline {
         PROJECT_NAME = 'DevOps'
         SONAR_SCANNER_HOME = tool 'SonarQubeScanner'
         SONARQUBE_URL = 'http://54.159.93.31:9000'
-        NEXUS_URL = 'http://54.147.143.71:8081/repository/war-files'
+        // Updated Nexus URL with Maven path structure
+        NEXUS_URL = 'http://54.147.143.71:8081/repository/maven-releases/com/example/DevOps/${BUILD_ID}'
         TOMCAT_URL = 'http://54.147.143.71:8090/manager/text/deploy'
     }
 
@@ -30,7 +31,7 @@ pipeline {
                     sh """
                         mvn clean package
                         ls -la target
-                        sudo mv target/*.war target/${PROJECT_NAME}.${BUILD_ID}.war
+                        sudo mv target/*.war target/${PROJECT_NAME}-${BUILD_ID}.war
                     """
                 }
             }
@@ -60,9 +61,10 @@ pipeline {
             steps {
                 dir("${MODULE_DIR}") {
                     sh """
-                        curl -v --user $NEXUS_CREDS_USR:$NEXUS_CREDS_PSW \
-                             --upload-file target/'${PROJECT_NAME}.${BUILD_ID}.war' \
-                             ${NEXUS_URL}/'${PROJECT_NAME}.${BUILD_ID}.war'
+                        echo 'Uploading WAR to Nexus...'
+                        curl -v --user \$NEXUS_CREDS_USR:\$NEXUS_CREDS_PSW \
+                             --upload-file target/${PROJECT_NAME}-${BUILD_ID}.war \
+                             ${NEXUS_URL}/${PROJECT_NAME}-${BUILD_ID}.war
                     """
                 }
             }
@@ -76,7 +78,7 @@ pipeline {
                 dir("${MODULE_DIR}") {
                     sh """
                         curl -v --user ${TOMCAT_CREDS_USR}:${TOMCAT_CREDS_PSW} \
-                             --upload-file target/${PROJECT_NAME}.${BUILD_ID}.war \
+                             --upload-file target/${PROJECT_NAME}-${BUILD_ID}.war \
                              "${TOMCAT_URL}?path=/${PROJECT_NAME}&update=true"
                     """
                 }

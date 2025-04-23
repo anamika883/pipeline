@@ -250,27 +250,7 @@ give your branch name
 
 click on save
 
----
-
-
-**update `pom.xml`, add:**
-
-```xml
-<distributionManagement>
-    <repository>
-        <id>nexus</id>
-        <url>http://54.147.143.71:8081/repository/maven-releases</url>
-    </repository>
-</distributionManagement>
-```
-
-git add . ; git commit -m "ll"; git push
-
-it will trigger the build
-
----
-
-Let me know if you'd like help modifying your `pom.xml` or if you want to switch to a Raw repo instead.
+for job trigger just add a empty  line at the end of jenkinsfile,
 
 add, commit and push so it will trigger the build
 
