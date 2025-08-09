@@ -8,10 +8,10 @@ pipeline {
         BACKUP = '/opt/'
         PROJECT_NAME = 'DevOps'
         SONAR_SCANNER_HOME = tool 'SonarQubeScanner'
-        SONARQUBE_URL = 'http://54.159.93.31:9000'
+        SONARQUBE_URL = 'http://52.66.203.82:9000'
         // Updated Nexus URL with Maven path structure
-        NEXUS_URL = 'http://54.147.143.71:8081/repository/maven-releases/com/example/DevOps/${BUILD_ID}'
-        TOMCAT_URL = 'http://54.147.143.71:8090/manager/text/deploy'
+        NEXUS_URL = 'http://43.205.217.26:8081/repository/maven-releases/com/example/DevOps/${BUILD_ID}'
+        TOMCAT_URL = 'http://43.205.217.26:8090/manager/text/deploy'
     }
 
     triggers {
