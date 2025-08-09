@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        GIT_URL = 'https://github.com/xaravind/pipeline.git'
+        GIT_URL = 'https://github.com/anamika883/pipeline.git'
         GIT_BRANCH = 'main'
         MODULE_DIR = 'java_code'
         BACKUP = '/opt/'
